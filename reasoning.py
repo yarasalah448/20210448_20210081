@@ -151,8 +151,20 @@ prenix1 = prenix_phrase1(phrase)
 prenix2 = prenix_phrase2(prenix1)
 # print(prenix2)
 
-from sympy import simplify_logic
+def eliminate_existence_quantifiers(phrase):
+    for k in range(len(phrase)):
+        if phrase[k] == '∃':
+            l = phrase[k + 1]
+            sub_str = phrase[:k + 2]
+            first_sub_str = phrase[:k]
+            for c in range(len(sub_str)):
+                if sub_str[c] == l:
+                    li_1 = [l]
+                    sub_str = sub_str[:c + 1] + "f(" + random_letter(li_1) + ")" + sub_str[c + 2:]
+            return first_sub_str + sub_str
+    return -1
 
+from sympy import simplify_logic
 
 def eliminate_universal_quantifiers(phrase):
     for k in range(len(phrase)):
@@ -160,7 +172,6 @@ def eliminate_universal_quantifiers(phrase):
             return phrase[:k] + phrase[k+2:]
     return -1
 
-# def
 # def rename_variables_in_clauses(cnf):
 #     clauses = cnf.split(' & ')
 #     renamed_clauses = []
@@ -175,27 +186,6 @@ def eliminate_universal_quantifiers(phrase):
 #         renamed_clause = ''.join(mapping.get(char, char) for char in clause)
 #         renamed_clauses.append(renamed_clause)
 #     return ' & '.join(renamed_clauses)
-
-
-# def eliminate_existential_quantifiers(expression):
-#     # sympify(expression).args
-#     skolem_function = Function('f')
-#     for subexpr in sympify(expression).args:
-#         if subexpr.is_Exists:
-#             bound_vars = subexpr.variables
-#             skolem_args = [symbols(f"{var.name}_{i}") for i, var in enumerate(bound_vars)]
-#             skolem_expr = skolem_function(*skolem_args)
-#             expression = expression.subs(subexpr, skolem_expr)
-#     return expression
-#
-#
-# def eliminate_universal_quantifiers(expression):
-#     modified_expression = expression
-#     for subexpr in expression.args:
-#         if subexpr.is_ForAll:
-#             modified_expression = modified_expression.subs(subexpr, subexpr.expr)
-#     return modified_expression
-#
 #
 # def distributiveLaws(expression):
 #
